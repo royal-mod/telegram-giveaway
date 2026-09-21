@@ -1,1 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Telegram Giveaway</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #101828, #172554, #0f172a);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    .logo {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #229ED9;
+      font-size: 38px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #cbd5e1;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .counter {
+      background: rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .counter-number {
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .counter-text {
+      color: #cbd5e1;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      color: #e2e8f0;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      outline: none;
+      background: rgba(0,0,0,0.25);
+      color: white;
+      font-size: 15px;
+    }
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
+    input:focus {
+      border-color: #38bdf8;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #229ED9;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #message {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .success {
+      color: #4ade80;
+    }
+
+    .error {
+      color: #fb7185;
+    }
+
+    .winner-box {
+      display: none;
+      margin-top: 25px;
+      padding: 18px;
+      border-radius: 15px;
+      background: rgba(250,204,21,0.12);
+      border: 1px solid rgba(250,204,21,0.3);
+      text-align: center;
+    }
+
+    .winner-box h2 {
+      margin-bottom: 8px;
+    }
+
+    .small {
+      margin-top: 18px;
+      color: #94a3b8;
+      font-size: 11px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+
+    <div class="logo">✈️</div>
+
+    <h1>Telegram Giveaway</h1>
+
+    <p class="subtitle">
+      Fill the form to enter the giveaway
+    </p>
+
+    <div class="counter">
+      <div class="counter-number">
+        <span id="count">0</span>/200
+      </div>
+
+      <div class="counter-text">
+        Valid entries
+      </div>
+    </div>
+
+    <form id="giveawayForm">
+
+      <label>Your Name</label>
+
+      <input
+        type="text"
+        id="name"
+        placeholder="Enter your name"
+        maxlength="50"
+        required
+      >
+
+      <label>Telegram ID</label>
+
+      <input
+        type="text"
+        id="telegramId"
+        placeholder="@username"
+        maxlength="50"
+        required
+      >
+
+      <button type="submit" id="submitBtn">
+        Submit Entry
+      </button>
+
+    </form>
+
+    <div id="message"></div>
+
+    <div class="winner-box" id="winnerBox">
+      <h2>🎉 Giveaway Complete</h2>
+      <p>200 valid entries have been completed.</p>
+      <p>5 winners have been randomly selected.</p>
+    </div>
+
+    <div class="small">
+      One Telegram ID can submit only once.
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyMahRSjdiXVNVSwFz9USfBNgq8ItHXNx9iBqeR39b55Rly9r97W5CvzIzv-06cPktp/exec";
+
+
+const form = document.getElementById("giveawayForm");
+const message = document.getElementById("message");
+const button = document.getElementById("submitBtn");
+const countElement = document.getElementById("count");
+const winnerBox = document.getElementById("winnerBox");
+
+
+form.addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  const name =
+    document.getElementById("name").value.trim();
+
+  const telegramId =
+    document.getElementById("telegramId").value.trim();
+
+
+  if (!name || !telegramId) {
+
+    message.textContent =
+      "Please fill all fields.";
+
+    message.className = "error";
+
+    return;
+  }
+
+
+  button.disabled = true;
+
+  button.textContent = "Submitting...";
+
+  message.textContent = "";
+
+  try {
+
+    const response = await fetch(API_URL, {
+
+      method: "POST",
+
+      body: JSON.stringify({
+        name: name,
+        telegramId: telegramId
+      })
+
+    });
+
+
+    const result = await response.json();
+
+
+    if (result.success) {
+
+      message.textContent = result.message;
+
+      message.className = "success";
+
+      countElement.textContent = result.count;
+
+      form.reset();
+
+
+      if (result.count >= 200) {
+
+        winnerBox.style.display = "block";
+
+        button.disabled = true;
+
+        button.textContent = "Giveaway Complete";
+
+      } else {
+
+        button.disabled = false;
+
+        button.textContent = "Submit Entry";
+
+      }
+
+    } else {
+
+      message.textContent = result.message;
+
+      message.className = "error";
+
+      button.disabled = false;
+
+      button.textContent = "Submit Entry";
+
+    }
+
+
+  } catch (error) {
+
+    message.textContent =
+      "Something went wrong. Please try again.";
+
+    message.className = "error";
+
+    button.disabled = false;
+
+    button.textContent = "Submit Entry";
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
