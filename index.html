@@ -1,858 +1,284 @@
-<!DOCTYPE html>
-<html lang="en">
+<script>
 
-<head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>ROYAL MOD Giveaway</title>
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbyMahRSjdiXVNVSwFz9USfBNqg8ItHXNx9iBqeR39b55Rly9r97W5CvzIzv-06cPktp/exec";
 
 
-  <style>
+const form =
+  document.getElementById("giveawayForm");
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+const message =
+  document.getElementById("message");
+
+const button =
+  document.getElementById("submitBtn");
+
+const countElement =
+  document.getElementById("count");
+
+const completeBox =
+  document.getElementById("completeBox");
 
 
-    body {
-      min-height: 100vh;
+// ==========================================
+// UPDATE STATUS
+// ==========================================
 
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+function updateStatus(data) {
 
-      background:
-        radial-gradient(
-          circle at top,
-          #263b78 0%,
-          #111a35 45%,
-          #060a16 100%
+  if (!data || !data.success) {
+    return;
+  }
+
+  const count =
+    Number(data.count || 0);
+
+  countElement.textContent =
+    Math.min(count, 200);
+
+
+  if (
+    data.completed ||
+    count >= 200
+  ) {
+
+    form.style.display =
+      "none";
+
+    completeBox.style.display =
+      "block";
+
+  }
+
+}
+
+
+// ==========================================
+// JSONP REQUEST
+// ==========================================
+
+function requestAPI(params) {
+
+  return new Promise(function(resolve, reject) {
+
+    const callbackName =
+      "royalModCallback_" +
+      Date.now() +
+      "_" +
+      Math.floor(
+        Math.random() * 100000
+      );
+
+
+    const script =
+      document.createElement("script");
+
+
+    const query =
+      new URLSearchParams(params);
+
+
+    query.set(
+      "callback",
+      callbackName
+    );
+
+
+    script.src =
+      API_URL +
+      "?" +
+      query.toString();
+
+
+    window[callbackName] =
+      function(data) {
+
+        delete window[callbackName];
+
+        script.remove();
+
+        resolve(data);
+
+      };
+
+
+    script.onerror =
+      function() {
+
+        delete window[callbackName];
+
+        script.remove();
+
+        reject(
+          new Error(
+            "Connection failed"
+          )
         );
 
-      color: #ffffff;
+      };
 
-      display: flex;
 
-      justify-content: center;
+    document.body.appendChild(
+      script
+    );
 
-      align-items: center;
 
-      padding: 20px;
-    }
+    // Timeout
+    setTimeout(
+      function() {
 
+        if (
+          window[callbackName]
+        ) {
 
-    .container {
-      width: 100%;
-      max-width: 460px;
-    }
+          delete window[callbackName];
 
+          script.remove();
 
-    .card {
-      width: 100%;
+          reject(
+            new Error(
+              "Request timeout"
+            )
+          );
 
-      padding: 30px;
+        }
 
-      border-radius: 26px;
+      },
+      15000
+    );
 
-      background:
-        rgba(255, 255, 255, 0.08);
+  });
 
-      border:
-        1px solid
-        rgba(255, 255, 255, 0.15);
+}
 
-      backdrop-filter: blur(18px);
 
-      box-shadow:
-        0 25px 70px
-        rgba(0, 0, 0, 0.45);
-    }
+// ==========================================
+// LOAD COUNT
+// ==========================================
 
+async function loadCount() {
 
-    /* =========================
-       ROYAL MOD LOGO
-       ========================= */
+  try {
 
-    .logo {
-      width: 105px;
-      height: 105px;
+    const data =
+      await requestAPI({});
 
-      margin: 0 auto 18px;
+    updateStatus(data);
 
-      border-radius: 50%;
+  } catch (error) {
 
-      overflow: hidden;
+    console.log(
+      "Count error:",
+      error
+    );
 
-      border:
-        3px solid
-        rgba(255, 255, 255, 0.85);
+  }
 
-      box-shadow:
-        0 0 30px
-        rgba(56, 189, 248, 0.35);
-    }
+}
 
 
-    .logo img {
-      width: 100%;
-      height: 100%;
+// ==========================================
+// FORM SUBMIT
+// ==========================================
 
-      object-fit: cover;
+form.addEventListener(
+  "submit",
+  async function(event) {
 
-      display: block;
-    }
+    event.preventDefault();
 
 
-    h1 {
-      text-align: center;
+    const name =
+      document
+        .getElementById("name")
+        .value
+        .trim();
 
-      font-size: 30px;
 
-      font-weight: 800;
+    const telegramId =
+      document
+        .getElementById("telegramId")
+        .value
+        .trim();
 
-      letter-spacing: 1px;
 
-      margin-bottom: 8px;
-    }
+    if (!name) {
 
+      message.textContent =
+        "Please enter your name.";
 
-    .subtitle {
-      text-align: center;
+      message.className =
+        "error";
 
-      color: #cbd5e1;
-
-      font-size: 14px;
-
-      margin-bottom: 25px;
-    }
-
-
-    /* =========================
-       COUNTER
-       ========================= */
-
-    .counter {
-      padding: 18px;
-
-      border-radius: 16px;
-
-      background:
-        rgba(255, 255, 255, 0.08);
-
-      text-align: center;
-
-      margin-bottom: 25px;
-    }
-
-
-    .counter-number {
-      font-size: 34px;
-
-      font-weight: 800;
-    }
-
-
-    .counter-text {
-      color: #94a3b8;
-
-      font-size: 13px;
-
-      margin-top: 4px;
-    }
-
-
-    /* =========================
-       FORM
-       ========================= */
-
-    label {
-      display: block;
-
-      color: #e2e8f0;
-
-      font-size: 14px;
-
-      margin-bottom: 7px;
-    }
-
-
-    input {
-      width: 100%;
-
-      padding: 15px;
-
-      border-radius: 13px;
-
-      border:
-        1px solid
-        rgba(255, 255, 255, 0.15);
-
-      background:
-        rgba(0, 0, 0, 0.25);
-
-      color: white;
-
-      outline: none;
-
-      font-size: 15px;
-
-      margin-bottom: 18px;
-    }
-
-
-    input::placeholder {
-      color: #64748b;
-    }
-
-
-    input:focus {
-      border-color: #38bdf8;
-
-      box-shadow:
-        0 0 0 3px
-        rgba(56, 189, 248, 0.1);
-    }
-
-
-    /* =========================
-       BUTTON
-       ========================= */
-
-    button {
-      width: 100%;
-
-      padding: 15px;
-
-      border: none;
-
-      border-radius: 13px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #229ed9,
-          #0284c7
-        );
-
-      color: white;
-
-      font-size: 16px;
-
-      font-weight: 700;
-
-      cursor: pointer;
-
-      transition:
-        transform 0.15s,
-        opacity 0.15s;
-    }
-
-
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-
-    button:disabled {
-      opacity: 0.5;
-
-      cursor: not-allowed;
-
-      transform: none;
-    }
-
-
-    /* =========================
-       MESSAGE
-       ========================= */
-
-    #message {
-      margin-top: 18px;
-
-      text-align: center;
-
-      font-size: 14px;
-
-      line-height: 1.5;
-
-      min-height: 20px;
-    }
-
-
-    .success {
-      color: #4ade80;
-    }
-
-
-    .error {
-      color: #fb7185;
-    }
-
-
-    /* =========================
-       GIVEAWAY COMPLETE
-       ========================= */
-
-    .complete-box {
-      display: none;
-
-      margin-top: 22px;
-
-      padding: 20px;
-
-      text-align: center;
-
-      border-radius: 16px;
-
-      background:
-        rgba(250, 204, 21, 0.10);
-
-      border:
-        1px solid
-        rgba(250, 204, 21, 0.30);
-    }
-
-
-    .complete-box h2 {
-      font-size: 20px;
-
-      margin-bottom: 8px;
-    }
-
-
-    .complete-box p {
-      color: #cbd5e1;
-
-      font-size: 14px;
-
-      line-height: 1.5;
-    }
-
-
-    /* =========================
-       FOOTER
-       ========================= */
-
-    .footer {
-      text-align: center;
-
-      color: #64748b;
-
-      font-size: 11px;
-
-      margin-top: 20px;
-    }
-
-
-    /* =========================
-       LOADING
-       ========================= */
-
-    .loading {
-      opacity: 0.7;
-
-      pointer-events: none;
-    }
-
-
-    /* =========================
-       MOBILE
-       ========================= */
-
-    @media (max-width: 500px) {
-
-      body {
-        padding: 12px;
-      }
-
-
-      .card {
-        padding: 24px 20px;
-      }
-
-
-      h1 {
-        font-size: 26px;
-      }
-
-
-      .logo {
-        width: 90px;
-        height: 90px;
-      }
-
-    }
-
-  </style>
-
-</head>
-
-
-<body>
-
-
-  <div class="container">
-
-    <div class="card">
-
-
-      <!-- =========================
-           ROYAL MOD LOGO
-           ========================= -->
-
-      <div class="logo">
-
-        <img
-          src="royal-mod.png"
-          alt="ROYAL MOD"
-        >
-
-      </div>
-
-
-      <!-- =========================
-           TITLE
-           ========================= -->
-
-      <h1>
-        ROYAL MOD
-      </h1>
-
-
-      <p class="subtitle">
-        🎉 Telegram Giveaway
-      </p>
-
-
-      <!-- =========================
-           ENTRY COUNTER
-           ========================= -->
-
-      <div class="counter">
-
-        <div class="counter-number">
-
-          <span id="count">
-            0
-          </span>
-
-          /200
-
-        </div>
-
-
-        <div class="counter-text">
-          Valid Entries
-        </div>
-
-      </div>
-
-
-      <!-- =========================
-           FORM
-           ========================= -->
-
-      <form id="giveawayForm">
-
-
-        <label for="name">
-          Your Name
-        </label>
-
-
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="Enter your name"
-          maxlength="50"
-          autocomplete="name"
-          required
-        >
-
-
-        <label for="telegramId">
-          Telegram ID
-        </label>
-
-
-        <input
-          type="text"
-          id="telegramId"
-          name="telegramId"
-          placeholder="@username"
-          maxlength="50"
-          autocomplete="off"
-          required
-        >
-
-
-        <button
-          type="submit"
-          id="submitBtn"
-        >
-          Submit Entry
-        </button>
-
-
-      </form>
-
-
-      <!-- =========================
-           MESSAGE
-           ========================= -->
-
-      <div id="message"></div>
-
-
-      <!-- =========================
-           COMPLETE MESSAGE
-           ========================= -->
-
-      <div
-        class="complete-box"
-        id="completeBox"
-      >
-
-        <h2>
-          🎉 Giveaway Completed
-        </h2>
-
-
-        <p>
-          200 valid entries have been completed.
-        </p>
-
-
-        <p>
-          5 winners have been randomly selected.
-        </p>
-
-      </div>
-
-
-      <div class="footer">
-
-        One Telegram ID can submit only once.
-
-      </div>
-
-
-    </div>
-
-  </div>
-
-
-
-  <script>
-
-
-    /* ==========================================
-       GOOGLE APPS SCRIPT WEB APP URL
-       ========================================== */
-
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbyMahRSjdiXVNVSwFz9USfBNqg8ItHXNx9iBqeR39b55Rly9r97W5CvzIzv-06cPktp/exec";
-
-
-    /* ==========================================
-       ELEMENTS
-       ========================================== */
-
-    const form =
-      document.getElementById(
-        "giveawayForm"
-      );
-
-
-    const message =
-      document.getElementById(
-        "message"
-      );
-
-
-    const button =
-      document.getElementById(
-        "submitBtn"
-      );
-
-
-    const countElement =
-      document.getElementById(
-        "count"
-      );
-
-
-    const completeBox =
-      document.getElementById(
-        "completeBox"
-      );
-
-
-    /* ==========================================
-       UPDATE STATUS
-       ========================================== */
-
-    function updateStatus(data) {
-
-      if (!data || !data.success) {
-        return;
-      }
-
-
-      const count =
-        Number(data.count || 0);
-
-
-      countElement.textContent =
-        Math.min(count, 200);
-
-
-      if (
-        data.completed ||
-        count >= 200
-      ) {
-
-        form.style.display =
-          "none";
-
-
-        completeBox.style.display =
-          "block";
-
-      }
+      return;
 
     }
 
 
-    /* ==========================================
-       LOAD CURRENT COUNT
-       ========================================== */
+    if (!telegramId) {
 
-    async function loadCount() {
+      message.textContent =
+        "Please enter your Telegram ID.";
 
-      try {
+      message.className =
+        "error";
 
-        const response =
-          await fetch(API_URL);
+      return;
+
+    }
 
 
-        const data =
-          await response.json();
+    button.disabled =
+      true;
+
+    button.textContent =
+      "Submitting...";
+
+    message.textContent =
+      "";
+
+
+    try {
+
+      const data =
+        await requestAPI({
+
+          name:
+            name,
+
+          telegramId:
+            telegramId
+
+        });
+
+
+      if (data.success) {
+
+        message.textContent =
+          data.message;
+
+        message.className =
+          "success";
 
 
         updateStatus(data);
 
 
-      } catch (error) {
+        form.reset();
 
-        console.log(
-          "Unable to load giveaway status."
-        );
 
-      }
+        if (
+          data.completed ||
+          Number(data.count) >= 200
+        ) {
 
-    }
+          button.disabled =
+            true;
 
+          button.textContent =
+            "Giveaway Complete";
 
-    /* ==========================================
-       FORM SUBMISSION
-       ========================================== */
-
-    form.addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-
-        const name =
-          document
-            .getElementById("name")
-            .value
-            .trim();
-
-
-        const telegramId =
-          document
-            .getElementById("telegramId")
-            .value
-            .trim();
-
-
-        /* ==========================
-           VALIDATION
-           ========================== */
-
-        if (!name) {
-
-          message.textContent =
-            "Please enter your name.";
-
-          message.className =
-            "error";
-
-          return;
-
-        }
-
-
-        if (!telegramId) {
-
-          message.textContent =
-            "Please enter your Telegram ID.";
-
-          message.className =
-            "error";
-
-          return;
-
-        }
-
-
-        /* ==========================
-           BUTTON LOADING
-           ========================== */
-
-        button.disabled =
-          true;
-
-
-        button.textContent =
-          "Submitting...";
-
-
-        message.textContent =
-          "";
-
-
-        try {
-
-
-          /* ==========================
-             SEND DATA
-             ========================== */
-
-          const response =
-            await fetch(
-              API_URL,
-              {
-
-                method: "POST",
-
-                body:
-                  JSON.stringify({
-
-                    name:
-                      name,
-
-                    telegramId:
-                      telegramId
-
-                  })
-
-              }
-            );
-
-
-          const data =
-            await response.json();
-
-
-          /* ==========================
-             SUCCESS
-             ========================== */
-
-          if (data.success) {
-
-            message.textContent =
-              data.message;
-
-            message.className =
-              "success";
-
-
-            updateStatus(data);
-
-
-            form.reset();
-
-
-            if (
-              data.completed ||
-              Number(data.count) >= 200
-            ) {
-
-              button.disabled =
-                true;
-
-              button.textContent =
-                "Giveaway Complete";
-
-            } else {
-
-              button.disabled =
-                false;
-
-              button.textContent =
-                "Submit Entry";
-
-            }
-
-          }
-
-
-          /* ==========================
-             ERROR
-             ========================== */
-
-          else {
-
-            message.textContent =
-              data.message ||
-              "Unable to submit entry.";
-
-            message.className =
-              "error";
-
-
-            if (
-              data.count !== undefined
-            ) {
-
-              countElement.textContent =
-                data.count;
-
-            }
-
-
-            button.disabled =
-              false;
-
-            button.textContent =
-              "Submit Entry";
-
-          }
-
-
-        } catch (error) {
-
-
-          message.textContent =
-            "Connection error. Please try again.";
-
-          message.className =
-            "error";
-
+        } else {
 
           button.disabled =
             false;
@@ -862,20 +288,66 @@
 
         }
 
+      } else {
+
+        message.textContent =
+          data.message ||
+          "Unable to submit entry.";
+
+        message.className =
+          "error";
+
+
+        if (
+          data.count !== undefined
+        ) {
+
+          countElement.textContent =
+            data.count;
+
+        }
+
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "Submit Entry";
+
       }
-    );
 
 
-    /* ==========================================
-       LOAD COUNT WHEN PAGE OPENS
-       ========================================== */
+    } catch (error) {
 
-    loadCount();
-
-
-  </script>
+      console.log(
+        "Submit error:",
+        error
+      );
 
 
-</body>
+      message.textContent =
+        "Connection error. Please try again.";
 
-</html>
+      message.className =
+        "error";
+
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Submit Entry";
+
+    }
+
+  }
+);
+
+
+// ==========================================
+// START
+// ==========================================
+
+loadCount();
+
+</script>
