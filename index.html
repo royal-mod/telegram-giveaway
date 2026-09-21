@@ -1,269 +1,557 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>ROYAL MOD - Telegram Giveaway</title>
 
+
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+
     body {
+
       min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
       background:
-        radial-gradient(circle at top, #172554 0%, #07111f 45%, #020617 100%);
+        radial-gradient(
+          circle at top,
+          #172554 0%,
+          #07111f 45%,
+          #020617 100%
+        );
+
       color: #ffffff;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       padding: 20px;
     }
 
+
     .container {
+
       width: 100%;
+
       max-width: 440px;
     }
 
+
     .card {
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      background:
+        rgba(15, 23, 42, 0.97);
+
+      border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
       border-radius: 24px;
+
       padding: 30px 24px;
+
       box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.45),
-        0 0 40px rgba(37, 99, 235, 0.10);
+        0 20px 60px
+        rgba(0, 0, 0, 0.45);
+
       text-align: center;
     }
 
+
     .logo {
+
       width: 92px;
+
       height: 92px;
+
       object-fit: cover;
+
       border-radius: 50%;
+
       display: block;
-      margin: 0 auto 15px;
-      border: 3px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+
+      margin:
+        0 auto 15px;
+
+      border:
+        3px solid
+        rgba(255, 255, 255, 0.15);
+
+      box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.35);
     }
 
+
     .brand {
+
       font-size: 28px;
+
       font-weight: 800;
+
       letter-spacing: 1px;
+
       margin-bottom: 6px;
     }
 
+
     .subtitle {
+
       color: #94a3b8;
+
       font-size: 14px;
+
       margin-bottom: 24px;
     }
 
+
     .giveaway-title {
+
       font-size: 23px;
+
       font-weight: 700;
+
       margin-bottom: 18px;
     }
 
+
     .counter-box {
-      background: rgba(30, 41, 59, 0.8);
+
+      background:
+        rgba(30, 41, 59, 0.85);
+
       border-radius: 16px;
+
       padding: 16px;
+
       margin-bottom: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+
+      border:
+        1px solid
+        rgba(255, 255, 255, 0.06);
     }
 
+
     .counter {
+
       font-size: 30px;
+
       font-weight: 800;
+
       margin-bottom: 5px;
     }
 
+
     .counter-label {
+
       color: #94a3b8;
+
       font-size: 13px;
     }
 
+
     .input-group {
+
       text-align: left;
+
       margin-bottom: 16px;
     }
 
+
     .input-group label {
+
       display: block;
+
       font-size: 14px;
+
       font-weight: 600;
+
       margin-bottom: 8px;
+
       color: #e2e8f0;
     }
 
+
     .input-group input {
+
       width: 100%;
+
       height: 52px;
+
       padding: 0 15px;
+
       border-radius: 13px;
-      border: 1px solid #334155;
+
+      border:
+        1px solid
+        #334155;
+
       outline: none;
+
       background: #0f172a;
+
       color: #ffffff;
+
       font-size: 15px;
+
       transition: 0.2s;
     }
 
+
     .input-group input::placeholder {
+
       color: #64748b;
     }
 
+
     .input-group input:focus {
+
       border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.12);
     }
 
+
     .submit-btn {
+
       width: 100%;
+
       height: 53px;
+
       border: none;
+
       border-radius: 14px;
-      background: linear-gradient(135deg, #2563eb, #7c3aed);
+
+      background:
+        linear-gradient(
+          135deg,
+          #2563eb,
+          #7c3aed
+        );
+
       color: white;
+
       font-size: 16px;
+
       font-weight: 700;
+
       cursor: pointer;
-      transition: transform 0.15s, opacity 0.15s;
+
+      transition:
+        transform 0.15s,
+        opacity 0.15s;
+
       margin-top: 5px;
     }
 
+
     .submit-btn:hover {
-      transform: translateY(-1px);
+
+      transform:
+        translateY(-1px);
     }
+
 
     .submit-btn:active {
-      transform: translateY(0);
+
+      transform:
+        translateY(0);
     }
 
+
     .submit-btn:disabled {
+
       opacity: 0.6;
+
       cursor: not-allowed;
+
       transform: none;
     }
 
+
     #message {
+
       min-height: 22px;
+
       margin-top: 15px;
+
       font-size: 14px;
+
       line-height: 1.4;
     }
 
+
     #message.success {
+
       color: #4ade80;
     }
 
+
     #message.error {
+
       color: #f87171;
     }
 
+
     .complete-box {
+
       display: none;
+
       padding: 22px 15px;
+
       border-radius: 16px;
-      background: rgba(22, 101, 52, 0.15);
-      border: 1px solid rgba(74, 222, 128, 0.2);
+
+      background:
+        rgba(22, 101, 52, 0.15);
+
+      border:
+        1px solid
+        rgba(74, 222, 128, 0.2);
+
       color: #86efac;
     }
 
+
     .complete-icon {
+
       font-size: 38px;
+
       margin-bottom: 10px;
     }
 
+
     .complete-title {
+
       font-size: 20px;
+
       font-weight: 700;
+
       margin-bottom: 6px;
     }
 
+
     .complete-text {
+
       color: #94a3b8;
+
       font-size: 13px;
+
       line-height: 1.5;
     }
+
+
+    /* WINNERS */
+
+    .winners-box {
+
+      display: none;
+
+      margin-top: 18px;
+
+      padding: 18px;
+
+      border-radius: 16px;
+
+      background:
+        rgba(30, 41, 59, 0.9);
+
+      border:
+        1px solid
+        rgba(251, 191, 36, 0.3);
+    }
+
+
+    .winners-title {
+
+      font-size: 21px;
+
+      font-weight: 800;
+
+      margin-bottom: 14px;
+
+      color: #fbbf24;
+    }
+
+
+    .winner-item {
+
+      background:
+        #0f172a;
+
+      border:
+        1px solid
+        #334155;
+
+      border-radius: 12px;
+
+      padding: 13px;
+
+      margin-top: 9px;
+
+      text-align: left;
+    }
+
+
+    .winner-number {
+
+      color: #fbbf24;
+
+      font-weight: 800;
+
+      margin-right: 6px;
+    }
+
+
+    .winner-name {
+
+      font-weight: 700;
+
+      color: #ffffff;
+    }
+
+
+    .winner-telegram {
+
+      color: #94a3b8;
+
+      font-size: 12px;
+
+      margin-top: 4px;
+
+      padding-left: 28px;
+    }
+
 
     .footer {
+
       margin-top: 22px;
+
       color: #64748b;
+
       font-size: 12px;
+
       line-height: 1.5;
     }
 
+
     @media (max-width: 480px) {
+
       body {
+
         padding: 14px;
       }
 
+
       .card {
+
         padding: 26px 18px;
+
         border-radius: 20px;
       }
 
+
       .brand {
+
         font-size: 25px;
       }
 
+
       .giveaway-title {
+
         font-size: 21px;
       }
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <div class="container">
+
 
     <div class="card">
 
+
       <!-- LOGO -->
+
       <img
         src="royal-mod.png"
         alt="ROYAL MOD"
         class="logo"
       >
 
+
       <!-- BRAND -->
+
       <div class="brand">
         ROYAL MOD
       </div>
+
 
       <div class="subtitle">
         Official Giveaway
       </div>
 
+
       <!-- TITLE -->
+
       <div class="giveaway-title">
         🎉 Telegram Giveaway
       </div>
 
+
       <!-- COUNTER -->
+
       <div class="counter-box">
+
         <div class="counter">
+
           <span id="count">0</span>/200
+
         </div>
 
         <div class="counter-label">
           Entries Submitted
         </div>
+
       </div>
 
+
       <!-- FORM -->
+
       <form id="giveawayForm">
 
+
         <div class="input-group">
+
           <label for="name">
             Name
           </label>
@@ -275,10 +563,14 @@
             placeholder="Enter your name"
             autocomplete="name"
             maxlength="50"
+            required
           >
+
         </div>
 
+
         <div class="input-group">
+
           <label for="telegramId">
             Telegram ID
           </label>
@@ -290,8 +582,11 @@
             placeholder="@username"
             autocomplete="off"
             maxlength="50"
+            required
           >
+
         </div>
+
 
         <button
           type="submit"
@@ -301,15 +596,20 @@
           Submit Entry
         </button>
 
+
         <div id="message"></div>
+
 
       </form>
 
-      <!-- COMPLETE MESSAGE -->
+
+      <!-- GIVEAWAY COMPLETE -->
+
       <div
         id="completeBox"
         class="complete-box"
       >
+
         <div class="complete-icon">
           🎉
         </div>
@@ -319,69 +619,243 @@
         </div>
 
         <div class="complete-text">
-          200 valid entries have been received.
-          The 5 winners have been selected.
+          200 entries have been received.
+          The winners have been selected below.
         </div>
+
       </div>
+
+
+      <!-- WINNERS -->
+
+      <div
+        id="winnersBox"
+        class="winners-box"
+      >
+
+        <div class="winners-title">
+          🏆 Giveaway Winners
+        </div>
+
+        <div id="winnersList"></div>
+
+      </div>
+
 
       <!-- FOOTER -->
+
       <div class="footer">
-        ROYAL MOD © 2026<br>
+
+        ROYAL MOD © 2026
+
+        <br>
+
         Giveaway entries are limited to one per Telegram ID.
+
       </div>
 
+
     </div>
+
 
   </div>
 
 
   <script>
 
-    /* =========================================
-       GOOGLE APPS SCRIPT URL
-       ========================================= */
 
-   const API_URL =
-  "https://script.google.com/macros/s/AKfycbw4VrrwZnmS0JXBtoeb4lR3KWJJeae6UgayRjgtEnyO9UsFuUzCXOBmL7X1qiWNZBCR/exec";
+    /* ==========================================
+       GOOGLE APPS SCRIPT
+       ========================================== */
 
 
-    /* =========================================
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbw4VrrwZnmS0JXBtoeb4lR3KWJJeae6UgayRjgtEnyO9UsFuUzCXOBmL7X1qiWNZBCR/exec";
+
+
+    /* ==========================================
        ELEMENTS
-       ========================================= */
+       ========================================== */
+
 
     const form =
-      document.getElementById("giveawayForm");
+      document.getElementById(
+        "giveawayForm"
+      );
+
 
     const message =
-      document.getElementById("message");
+      document.getElementById(
+        "message"
+      );
+
 
     const button =
-      document.getElementById("submitBtn");
+      document.getElementById(
+        "submitBtn"
+      );
+
 
     const countElement =
-      document.getElementById("count");
+      document.getElementById(
+        "count"
+      );
+
 
     const completeBox =
-      document.getElementById("completeBox");
+      document.getElementById(
+        "completeBox"
+      );
 
 
-    /* =========================================
-       UPDATE COUNTER
-       ========================================= */
+    const winnersBox =
+      document.getElementById(
+        "winnersBox"
+      );
 
-    function updateStatus(data) {
 
-      if (!data) {
+    const winnersList =
+      document.getElementById(
+        "winnersList"
+      );
+
+
+    /* ==========================================
+       ESCAPE HTML
+       ========================================== */
+
+
+    function escapeHTML(value) {
+
+      return String(value || "")
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+    }
+
+
+    /* ==========================================
+       SHOW WINNERS
+       ========================================== */
+
+
+    function showWinners(winners) {
+
+
+      if (
+        !winners ||
+        winners.length === 0
+      ) {
+
         return;
       }
 
-      if (data.count !== undefined) {
+
+      winnersList.innerHTML = "";
+
+
+      winners.forEach(
+        function(winner, index) {
+
+
+          const item =
+            document.createElement(
+              "div"
+            );
+
+
+          item.className =
+            "winner-item";
+
+
+          item.innerHTML =
+
+            '<span class="winner-number">' +
+
+            "#" +
+            (index + 1) +
+
+            "</span>" +
+
+            '<span class="winner-name">' +
+
+            escapeHTML(
+              winner.name
+            ) +
+
+            "</span>" +
+
+            '<div class="winner-telegram">' +
+
+            escapeHTML(
+              winner.telegramId
+            ) +
+
+            "</div>";
+
+
+          winnersList.appendChild(
+            item
+          );
+
+        }
+      );
+
+
+      winnersBox.style.display =
+        "block";
+    }
+
+
+    /* ==========================================
+       UPDATE STATUS
+       ========================================== */
+
+
+    function updateStatus(data) {
+
+
+      if (!data) {
+
+        return;
+      }
+
+
+      if (
+        data.count !== undefined
+      ) {
 
         const count =
           Number(data.count) || 0;
 
+
         countElement.textContent =
-          Math.min(count, 200);
+          Math.min(
+            count,
+            200
+          );
       }
 
 
@@ -390,144 +864,206 @@
         Number(data.count) >= 200
       ) {
 
-        form.style.display = "none";
 
-        completeBox.style.display = "block";
+        form.style.display =
+          "none";
+
+
+        completeBox.style.display =
+          "block";
+
+
+        showWinners(
+          data.winners || []
+        );
+
       }
+
     }
 
 
-    /* =========================================
+    /* ==========================================
        JSONP REQUEST
-       ========================================= */
+       ========================================== */
+
 
     function requestAPI(params) {
 
-      return new Promise(function(resolve, reject) {
 
-        const callbackName =
-          "royalModCallback_" +
-          Date.now() +
-          "_" +
-          Math.floor(
-            Math.random() * 1000000
+      return new Promise(
+        function(resolve, reject) {
+
+
+          const callbackName =
+
+            "royalModCallback_" +
+
+            Date.now() +
+
+            "_" +
+
+            Math.floor(
+              Math.random() *
+              1000000
+            );
+
+
+          const script =
+            document.createElement(
+              "script"
+            );
+
+
+          const query =
+            new URLSearchParams();
+
+
+          Object.keys(
+            params || {}
+          ).forEach(
+            function(key) {
+
+
+              query.set(
+                key,
+                params[key]
+              );
+
+            }
           );
 
 
-        const script =
-          document.createElement("script");
+          query.set(
+            "callback",
+            callbackName
+          );
 
 
-        const query =
-          new URLSearchParams();
+          script.src =
+
+            API_URL +
+
+            "?" +
+
+            query.toString();
 
 
-        Object.keys(params || {}).forEach(
-          function(key) {
+          let finished =
+            false;
 
-            query.set(
-              key,
-              params[key]
-            );
+
+          function cleanup() {
+
+
+            if (finished) {
+
+              return;
+            }
+
+
+            finished =
+              true;
+
+
+            delete window[
+              callbackName
+            ];
+
+
+            if (
+              script.parentNode
+            ) {
+
+              script.parentNode
+                .removeChild(
+                  script
+                );
+            }
 
           }
-        );
 
 
-        query.set(
-          "callback",
-          callbackName
-        );
+          window[
+            callbackName
+          ] =
+
+            function(data) {
+
+              cleanup();
+
+              resolve(data);
+
+            };
 
 
-        script.src =
-          API_URL +
-          "?" +
-          query.toString();
+          script.onerror =
 
-
-        let finished = false;
-
-
-        function cleanup() {
-
-          if (finished) {
-            return;
-          }
-
-          finished = true;
-
-          delete window[callbackName];
-
-          if (script.parentNode) {
-            script.parentNode.removeChild(script);
-          }
-        }
-
-
-        window[callbackName] =
-          function(data) {
-
-            cleanup();
-
-            resolve(data);
-          };
-
-
-        script.onerror =
-          function() {
-
-            cleanup();
-
-            reject(
-              new Error(
-                "Connection failed"
-              )
-            );
-          };
-
-
-        document.body.appendChild(
-          script
-        );
-
-
-        setTimeout(
-          function() {
-
-            if (!finished) {
+            function() {
 
               cleanup();
 
               reject(
                 new Error(
-                  "Request timeout"
+                  "Connection failed"
                 )
               );
-            }
 
-          },
-          15000
-        );
+            };
 
-      });
+
+          document.body.appendChild(
+            script
+          );
+
+
+          setTimeout(
+            function() {
+
+
+              if (!finished) {
+
+
+                cleanup();
+
+
+                reject(
+                  new Error(
+                    "Request timeout"
+                  )
+                );
+
+              }
+
+            },
+            15000
+          );
+
+        }
+      );
+
     }
 
 
-    /* =========================================
-       LOAD CURRENT COUNT
-       ========================================= */
+    /* ==========================================
+       LOAD COUNT
+       ========================================== */
+
 
     async function loadCount() {
 
+
       try {
+
 
         const data =
           await requestAPI({});
 
+
         updateStatus(data);
 
+
       } catch (error) {
+
 
         console.log(
           "Count error:",
@@ -535,59 +1071,76 @@
         );
 
       }
+
     }
 
 
-    /* =========================================
-       FORM SUBMIT
-       ========================================= */
+    /* ==========================================
+       SUBMIT FORM
+       ========================================== */
+
 
     form.addEventListener(
       "submit",
       async function(event) {
 
+
         event.preventDefault();
 
 
         const name =
+
           document
-            .getElementById("name")
+            .getElementById(
+              "name"
+            )
             .value
             .trim();
 
 
         const telegramId =
+
           document
-            .getElementById("telegramId")
+            .getElementById(
+              "telegramId"
+            )
             .value
             .trim();
 
 
-        /* NAME CHECK */
+        /* NAME */
 
         if (!name) {
+
 
           message.textContent =
             "Please enter your name.";
 
+
           message.className =
             "error";
 
+
           return;
+
         }
 
 
-        /* TELEGRAM ID CHECK */
+        /* TELEGRAM ID */
 
         if (!telegramId) {
+
 
           message.textContent =
             "Please enter your Telegram ID.";
 
+
           message.className =
             "error";
 
+
           return;
+
         }
 
 
@@ -596,6 +1149,7 @@
         button.disabled =
           true;
 
+
         button.textContent =
           "Submitting...";
 
@@ -603,11 +1157,13 @@
         message.textContent =
           "";
 
+
         message.className =
           "";
 
 
         try {
+
 
           const data =
             await requestAPI({
@@ -623,17 +1179,26 @@
 
           /* SUCCESS */
 
-          if (data && data.success) {
+          if (
+            data &&
+            data.success
+          ) {
+
 
             message.textContent =
+
               data.message ||
+
               "Entry successfully submitted!";
+
 
             message.className =
               "success";
 
 
-            updateStatus(data);
+            updateStatus(
+              data
+            );
 
 
             form.reset();
@@ -644,32 +1209,42 @@
               Number(data.count) >= 200
             ) {
 
+
               button.disabled =
                 true;
+
 
               button.textContent =
                 "Giveaway Complete";
 
+
             } else {
+
 
               button.disabled =
                 false;
 
+
               button.textContent =
                 "Submit Entry";
+
             }
 
 
           } else {
 
-            /* ERROR FROM SERVER */
+
+            /* SERVER ERROR / DUPLICATE */
 
             message.textContent =
+
               (
                 data &&
                 data.message
               ) ||
+
               "Unable to submit entry.";
+
 
             message.className =
               "error";
@@ -680,23 +1255,34 @@
               data.count !== undefined
             ) {
 
+
               countElement.textContent =
+
                 Math.min(
-                  Number(data.count) || 0,
+
+                  Number(
+                    data.count
+                  ) || 0,
+
                   200
+
                 );
+
             }
 
 
             button.disabled =
               false;
 
+
             button.textContent =
               "Submit Entry";
+
           }
 
 
         } catch (error) {
+
 
           console.log(
             "Submit error:",
@@ -707,6 +1293,7 @@
           message.textContent =
             "Connection error. Please try again.";
 
+
           message.className =
             "error";
 
@@ -714,21 +1301,39 @@
           button.disabled =
             false;
 
+
           button.textContent =
             "Submit Entry";
+
         }
+
 
       }
     );
 
 
-    /* =========================================
-       START
-       ========================================= */
+    /* ==========================================
+       INITIAL LOAD
+       ========================================== */
+
 
     loadCount();
 
+
+    /* ==========================================
+       AUTO CHECK EVERY 10 SECONDS
+       ========================================== */
+
+
+    setInterval(
+      loadCount,
+      10000
+    );
+
+
   </script>
 
+
 </body>
+
 </html>
